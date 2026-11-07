@@ -1,9 +1,18 @@
 {
-    "extends": "expo-module-scripts/tsconfig.plugin",
-    "compilerOptions": {
-        "outDir": "build",
-        "rootDir": "src"
-    },
-    "include": ["./src"],
-    "exclude": ["**/__mocks__/*", "**/__tests__/*"]
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "allowJs": false,
+    "composite": true,
+    "customConditions": [],
+    "declaration": true,
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "noEmit": false,
+    "outDir": "build",
+    "rootDir": "src",
+    "tsBuildInfoFile": "build/tsconfig.tsbuildinfo",
+    "types": ["node"]
+  },
+  "include": ["./src"],
+  "exclude": ["**/__mocks__/*", "**/__tests__/*"]
 }

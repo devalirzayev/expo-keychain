@@ -39,26 +39,16 @@ export declare const WHEN_UNLOCKED: KeychainAccessibilityConstant;
 export declare const WHEN_UNLOCKED_THIS_DEVICE_ONLY: KeychainAccessibilityConstant;
 export type KeychainOptions = {
     /**
-     * - Android: Equivalent of the public/private key pair `Alias`.
-     * - iOS: The item's service, equivalent to [`kSecAttrService`](https://developer.apple.com/documentation/security/ksecattrservice/).
-     * > If the item is set with the `keychainService` option, it will be required to later fetch the value.
+     * The item's service, equivalent to [`kSecAttrService`](https://developer.apple.com/documentation/security/ksecattrservice/).
+     * If the item is set with the `keychainService` option, it will be required to later fetch the value.
      */
     keychainService?: string;
     /**
-     * Option responsible for enabling the usage of the user authentication methods available on the device while
-     * accessing data stored in Keychain.
-     * - Android: Equivalent to [`setUserAuthenticationRequired(true)`](https://developer.android.com/reference/android/security/keystore/KeyGenParameterSpec.Builder#setUserAuthenticationRequired(boolean))
-     *   (requires API 23).
-     * - iOS: Equivalent to [`biometryCurrentSet`](https://developer.apple.com/documentation/security/secaccesscontrolcreateflags/2937192-biometrycurrentset).
-     * Complete functionality is unlocked only with a freshly generated key - this would not work in tandem with the `keychainService`
-     * value used for the others non-authenticated operations.
+     * Requires biometric authentication when reading or updating an existing value. Creating a new
+     * value does not prompt for authentication. This uses [`biometryCurrentSet`](https://developer.apple.com/documentation/security/secaccesscontrolcreateflags/2937192-biometrycurrentset).
      *
-     * This option works slightly differently across platforms: On Android, user authentication is required for all operations.
-     * On iOS, the user is prompted to authenticate only when reading or updating an existing value (not when creating a new one).
-     *
-     * Warning: This option is not supported in Expo Go when biometric authentication is available due to a missing NSFaceIDUsageDescription.
-     * In release builds or when using continuous native generation, make sure to use the `expo-keychain` config plugin.
-     *
+     * When using this option, configure the `expo-keychain` config plugin to set
+     * `NSFaceIDUsageDescription` in your app's Info.plist.
      */
     requireAuthentication?: boolean;
     /**
@@ -84,14 +74,14 @@ export type KeychainOptions = {
  * permissions.
  *
  * @return Promise which fulfils with a `boolean`, indicating whether the Keychain API is available
- * on the current device. Currently, this resolves `true` on Android and iOS only.
+ * on the current device. Currently, this resolves `true` on iOS and tvOS.
  */
 export declare function isAvailableAsync(): Promise<boolean>;
 /**
  * Delete the value associated with the provided key.
  *
  * @param key The key that was used to store the associated value.
- * @param options An [`KeychainOptions`](#securestoreoptions) object.
+ * @param options A [`KeychainOptions`](#keychainoptions) object.
  *
  * @return A promise that rejects if the value can't be deleted.
  */
@@ -100,7 +90,7 @@ export declare function deleteItemAsync(key: string, options?: KeychainOptions):
  * Reads the stored value associated with the provided key.
  *
  * @param key The key that was used to store the associated value.
- * @param options An [`KeychainOptions`](#securestoreoptions) object.
+ * @param options A [`KeychainOptions`](#keychainoptions) object.
  *
  * @return A promise that resolves to the previously stored value. It resolves with `null` if there is no entry
  * for the given key or if the key has been invalidated. It rejects if an error occurs while retrieving the value.
@@ -115,7 +105,7 @@ export declare function getItemAsync(key: string, options?: KeychainOptions): Pr
  *
  * @param key The key to associate with the stored value. Keys may contain alphanumeric characters, `.`, `-`, and `_`.
  * @param value The value to store.
- * @param options An [`KeychainOptions`](#securestoreoptions) object.
+ * @param options A [`KeychainOptions`](#keychainoptions) object.
  *
  * @return A promise that rejects if value cannot be stored on the device.
  */
@@ -126,7 +116,7 @@ export declare function setItemAsync(key: string, value: string, options?: Keych
  *
  * @param key The key to associate with the stored value. Keys may contain alphanumeric characters, `.`, `-`, and `_`.
  * @param value The value to store.
- * @param options An [`KeychainOptions`](#securestoreoptions) object.
+ * @param options A [`KeychainOptions`](#keychainoptions) object.
  *
  */
 export declare function setItem(key: string, value: string, options?: KeychainOptions): void;
@@ -134,8 +124,8 @@ export declare function setItem(key: string, value: string, options?: KeychainOp
  * Synchronously reads the stored value associated with the provided key.
  * > **Note:** This function blocks the JavaScript thread, so the application may not be interactive when reading a value with `requireAuthentication`
  * > option set to `true` until the user authenticates.
- * @param key The key that was used to store the associated value.
- * @param options An [`KeychainOptions`](#securestoreoptions) object.
+ * @param key The key to associate with the stored value. Keys may contain alphanumeric characters, `.`, `-`, and `_`.
+ * @param options A [`KeychainOptions`](#keychainoptions) object.
  *
  * @return Previously stored value. It resolves with `null` if there is no entry
  * for the given key or if the key has been invalidated.
@@ -144,7 +134,6 @@ export declare function getItem(key: string, options?: KeychainOptions): string 
 /**
  * Checks if the value can be saved with `requireAuthentication` option enabled.
  * @return `true` if the device supports biometric authentication and the enrolled method is sufficiently secure. Otherwise, returns `false`. Always returns false on tvOS.
- * @platform android
  * @platform ios
  */
 export declare function canUseBiometricAuthentication(): boolean;

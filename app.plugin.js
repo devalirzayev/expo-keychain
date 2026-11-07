@@ -1,1 +1,1 @@
-module.exports = require("./plugin/build/withKeychain")
+module.exports = require('./plugin/build/withKeychain');

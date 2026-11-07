@@ -1,30 +1,44 @@
 {
-    "name": "expo-keychain",
-    "version": "1.0.0",
-    "description": "Provides a way to work with Keychain.",
-    "main": "build/Keychain.js",
-    "types": "build/Keychain.d.ts",
-    "sideEffects": false,
-    "scripts": {
-        "build": "expo-module build",
-        "clean": "expo-module clean",
-        "prepare": "expo-module prepare",
-        "prepublishOnly": "expo-module prepublishOnly",
-        "expo-module": "expo-module"
-    },
-    "keywords": [
-        "react-native",
-        "expo",
-        "expo-keychain",
-        "secure",
-        "store"
-    ],
-    "license": "MIT",
-    "devDependencies": {
-        "expo-module-scripts": "^5.0.7",
-        "prettier": "^3.6.2"
-    },
-    "peerDependencies": {
-        "expo": "*"
-    }
+  "name": "expo-keychain",
+  "version": "1.0.0",
+  "description": "Expo module for securely storing key-value pairs in Apple Keychain.",
+  "main": "build/Keychain.js",
+  "types": "build/Keychain.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "node internal/module_scripts/clean.js",
+    "lint": "eslint src/ plugin/src/",
+    "prepare": "npm run clean && npm run build",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "react-native",
+    "expo",
+    "expo-keychain",
+    "keychain",
+    "secure",
+    "store"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devalirzayev/expo-keychain.git"
+  },
+  "bugs": {
+    "url": "https://github.com/devalirzayev/expo-keychain/issues"
+  },
+  "author": "devalirzayev",
+  "license": "MIT",
+  "homepage": "https://github.com/devalirzayev/expo-keychain#readme",
+  "devDependencies": {
+    "@types/node": "^24.19.2",
+    "eslint": "~9.39.4",
+    "eslint-config-universe": "^16.1.2",
+    "expo": "^58.0.23",
+    "prettier": "^3.9.10",
+    "typescript": "~6.0.3"
+  },
+  "peerDependencies": {
+    "expo": "*"
+  }
 }
